@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherBloom - История</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>История мира Aether</h1>
+            <button onclick="location.href='index.html'">Назад</button>
+        </header>
+
+        <main class="story-container">
+            <div class="chapter" id="chapter1">
+                <h2>Глава 1: Пробуждение</h2>
+                <div class="story-content">
+                    <p>Вы просыпаетесь в незнакомом мире, наполненном плавающими островами и древней магией. Воздух дрожит от энергии, называемой Эфиром...</p>
+                </div>
+                <button class="start-chapter" onclick="startChapter(1)">Начать главу</button>
+            </div>
+
+            <div class="chapter locked" id="chapter2">
+                <h2>Глава 2: Хранители Эфира</h2>
+                <div class="story-content">
+                    <p>Древние существа, хранители баланса этого мира, нуждаются в вашей помощи...</p>
+                </div>
+                <div class="chapter-status">
+                    <span class="timer" id="timer2">Доступно через: 24:00:00</span>
+                    <button class="start-chapter hidden" onclick="startChapter(2)">Начать главу</button>
+                </div>
+            </div>
+
+            <div class="chapter locked" id="chapter3">
+                <h2>Глава 3: Искажение</h2>
+                <div class="story-content">
+                    <p>Темная энергия начинает проникать в мир, нарушая хрупкий баланс...</p>
+                </div>
+                <div class="chapter-status">
+                    <span class="timer" id="timer3">Доступно через: 48:00:00</span>
+                    <button class="start-chapter hidden" onclick="startChapter(3)">Начать главу</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function startChapter(chapterNum) {
+            const gameData = JSON.parse(localStorage.getItem('gameData')) || initGameData();
+            
+            if (chapterNum === 1 || canPlayChapter(chapterNum)) {
+                if (chapterNum > gameData.currentLevel) {
+                    gameData.currentLevel = chapterNum;
+                    localStorage.setItem('gameData', JSON.stringify(gameData));
+                }
+                location.href = 'game.html';
+            }
+        }
+
+        function canPlayChapter(chapterNum) {
+            const gameData = JSON.parse(localStorage.getItem('gameData')) || initGameData();
+            const now = Date.now();
+            const chapterTime = gameData.chapterUnlockTimes[chapterNum];
+            
+            return chapterTime && now >= chapterTime;
+        }
+
+        function updateChapterAvailability() {
+            const gameData = JSON.parse(localStorage.getItem('gameData')) || initGameData();
+            
+            for (let i = 2; i <= 3; i++) {
+                const chapterEl = document.getElementById(`chapter${i}`);
+                const timerEl = document.getElementById(`timer${i}`);
+                const buttonEl = chapterEl.querySelector('.start-chapter');
+                
+                if (canPlayChapter(i)) {
+                    chapterEl.classList.remove('locked');
+                    timerEl.classList.add('hidden');
+                    buttonEl.classList.remove('hidden');
+                } else {
+                    const unlockTime = gameData.chapterUnlockTimes[i];
+                    updateTimer(timerEl, unlockTime);
+                }
+            }
+        }
+
+        function updateTimer(timerEl, unlockTime) {
+            const now = Date.now();
+            const diff = unlockTime - now;
+            
+            if (diff <= 0) {
+                timerEl.textContent = "Доступно сейчас!";
+                return;
+            }
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            timerEl.textContent = `Доступно через: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('telegramUser')) {
+                location.href = 'index.html';
+                return;
+            }
+            
+            initGameData();
+            updateChapterAvailability();
+            setInterval(updateChapterAvailability, 1000);
+        });
+    </script>
+</body>
+</html>

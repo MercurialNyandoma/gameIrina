@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AetherBloom - Главная</title>
+    <script src="https://telegram.org/js/telegram-widget.js?22" 
+            data-telegram-login="AetherBloomBot" 
+            data-size="large" 
+            data-onauth="onTelegramAuth(user)" 
+            data-request-access="write"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AetherBloom</h1>
+            <div id="userProfile" class="hidden">
+                <img id="userAvatar" src="" alt="Аватар">
+                <span id="userName"></span>
+            </div>
+        </header>
+
+        <main class="menu">
+            <div class="auth-section">
+                <div id="telegram-login-container"></div>
+            </div>
+            
+            <div class="game-stats hidden">
+                <div class="stat">
+                    <span>Уровень: </span>
+                    <span id="currentLevel">1</span>
+                </div>
+                <div class="stat">
+                    <span>Очки: </span>
+                    <span id="currentPoints">0</span>
+                </div>
+                <div class="stat">
+                    <span>Энергия: </span>
+                    <span id="currentEnergy">5/5</span>
+                </div>
+            </div>
+
+            <nav class="menu-buttons hidden">
+                <button onclick="location.href='story.html'">История</button>
+                <button onclick="location.href='game.html'">Играть</button>
+            </nav>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function onTelegramAuth(user) {
+            const userData = {
+                id: user.id,
+                firstName: user.first_name,
+                lastName: user.last_name || '',
+                username: user.username || '',
+                photoUrl: user.photo_url || '',
+                authDate: user.auth_date,
+                hash: user.hash
+            };
+            
+            localStorage.setItem('telegramUser', JSON.stringify(userData));
+            updateUserProfile();
+            initGameData();
+        }
+
+        function updateUserProfile() {
+            const userData = JSON.parse(localStorage.getItem('telegramUser'));
+            if (userData) {
+                document.getElementById('userName').textContent = userData.firstName;
+                if (userData.photoUrl) {
+                    document.getElementById('userAvatar').src = userData.photoUrl;
+                }
+                document.getElementById('userProfile').classList.remove('hidden');
+                document.querySelector('.auth-section').classList.add('hidden');
+                document.querySelector('.game-stats').classList.remove('hidden');
+                document.querySelector('.menu-buttons').classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUserProfile();
+            updateEnergy();
+        });
+    </script>
+</body>
+</html>

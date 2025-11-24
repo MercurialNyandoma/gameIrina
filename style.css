@@ -1,0 +1,281 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+h1 {
+    font-size: 1.8em;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Главное меню */
+.menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.auth-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.game-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 300px;
+}
+
+button {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* Профиль пользователя */
+#userProfile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#userAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+/* Страница истории */
+.story-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.chapter {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.chapter.locked {
+    opacity: 0.6;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.chapter h2 {
+    margin-bottom: 15px;
+    color: #ffd700;
+}
+
+.story-content {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.chapter-status {
+    text-align: center;
+}
+
+.timer {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: #ff6b6b;
+}
+
+/* Игровое поле */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.game-info {
+    display: flex;
+    gap: 15px;
+    font-weight: bold;
+}
+
+.game-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.warning {
+    background: #ff6b6b;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.game-board-container {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 7/6;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.game-board {
+    display: grid;
+    gap: 4px;
+    height: 100%;
+    width: 100%;
+}
+
+.tile {
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: inset 2px 2px 5px rgba(255, 255, 255, 0.2),
+                inset -2px -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tile:hover {
+    transform: scale(1.05);
+}
+
+.tile.selected {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px gold;
+}
+
+/* Цвета плиток */
+.type-0 { background: linear-gradient(45deg, #ff6b6b, #c44569); }
+.type-1 { background: linear-gradient(45deg, #4834d4, #686de0); }
+.type-2 { background: linear-gradient(45deg, #00d2d3, #54a0ff); }
+.type-3 { background: linear-gradient(45deg, #feca57, #ff9ff3); }
+.type-4 { background: linear-gradient(45deg, #48dbfb, #0abde3); }
+.type-5 { background: linear-gradient(45deg, #1dd1a1, #10ac84); }
+
+.game-controls {
+    display: flex;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.game-controls button {
+    flex: 1;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    .game-info {
+        flex-direction: column;
+        gap: 5px;
+        text-align: center;
+    }
+    
+    .game-board-container {
+        max-width: 100%;
+    }
+    
+    button {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 320px) {
+    .game-stats {
+        padding: 15px;
+    }
+    
+    .chapter {
+        padding: 15px;
+    }
+    
+    .tile {
+        border-radius: 6px;
+    }
+}
