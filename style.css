@@ -34,6 +34,11 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+h2 {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
 .hidden {
     display: none !important;
 }
@@ -48,7 +53,33 @@ h1 {
 
 .auth-section {
     text-align: center;
-    padding: 20px;
+    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+input {
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+input:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .game-stats {
@@ -59,6 +90,8 @@ h1 {
     padding: 20px;
     border-radius: 15px;
     backdrop-filter: blur(10px);
+    width: 100%;
+    max-width: 300px;
 }
 
 .stat {
@@ -103,10 +136,11 @@ button:active {
     gap: 10px;
 }
 
-#userAvatar {
+.avatar-placeholder {
     width: 40px;
     height: 40px;
     border-radius: 50%;
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
     border: 2px solid white;
 }
 
@@ -133,11 +167,16 @@ button:active {
 .chapter h2 {
     margin-bottom: 15px;
     color: #ffd700;
+    text-align: left;
 }
 
 .story-content {
     margin-bottom: 20px;
     line-height: 1.6;
+}
+
+.story-content p {
+    margin-bottom: 10px;
 }
 
 .chapter-status {
@@ -163,6 +202,7 @@ button:active {
     display: flex;
     gap: 15px;
     font-weight: bold;
+    flex-wrap: wrap;
 }
 
 .game-main {
@@ -179,6 +219,8 @@ button:active {
     border-radius: 10px;
     text-align: center;
     font-weight: bold;
+    width: 100%;
+    max-width: 400px;
 }
 
 .game-board-container {
@@ -263,6 +305,10 @@ button:active {
     button {
         padding: 12px 20px;
         font-size: 1em;
+    }
+    
+    .auth-section {
+        padding: 20px 15px;
     }
 }
 

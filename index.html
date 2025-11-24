@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AetherBloom - Главная</title>
-    <script src="https://telegram.org/js/telegram-widget.js?22" 
-            data-telegram-login="AetherBloomBot" 
-            data-size="large" 
-            data-onauth="onTelegramAuth(user)" 
-            data-request-access="write"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,17 +11,21 @@
         <header>
             <h1>AetherBloom</h1>
             <div id="userProfile" class="hidden">
-                <img id="userAvatar" src="" alt="Аватар">
+                <div class="avatar-placeholder"></div>
                 <span id="userName"></span>
             </div>
         </header>
 
         <main class="menu">
-            <div class="auth-section">
-                <div id="telegram-login-container"></div>
+            <div class="auth-section" id="authSection">
+                <h2>Добро пожаловать в AetherBloom!</h2>
+                <div class="login-form">
+                    <input type="text" id="playerName" placeholder="Введите ваше имя" maxlength="20">
+                    <button onclick="login()">Начать игру</button>
+                </div>
             </div>
             
-            <div class="game-stats hidden">
+            <div class="game-stats hidden" id="gameStats">
                 <div class="stat">
                     <span>Уровень: </span>
                     <span id="currentLevel">1</span>
@@ -41,42 +40,57 @@
                 </div>
             </div>
 
-            <nav class="menu-buttons hidden">
+            <nav class="menu-buttons hidden" id="menuButtons">
                 <button onclick="location.href='story.html'">История</button>
                 <button onclick="location.href='game.html'">Играть</button>
+                <button onclick="logout()">Выйти</button>
             </nav>
         </main>
     </div>
 
     <script src="script.js"></script>
     <script>
-        function onTelegramAuth(user) {
+        function login() {
+            const playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) {
+                alert('Пожалуйста, введите ваше имя');
+                return;
+            }
+
             const userData = {
-                id: user.id,
-                firstName: user.first_name,
-                lastName: user.last_name || '',
-                username: user.username || '',
-                photoUrl: user.photo_url || '',
-                authDate: user.auth_date,
-                hash: user.hash
+                name: playerName,
+                loginTime: Date.now()
             };
             
-            localStorage.setItem('telegramUser', JSON.stringify(userData));
+            localStorage.setItem('playerData', JSON.stringify(userData));
             updateUserProfile();
             initGameData();
         }
 
+        function logout() {
+            localStorage.removeItem('playerData');
+            updateUserProfile();
+        }
+
         function updateUserProfile() {
-            const userData = JSON.parse(localStorage.getItem('telegramUser'));
+            const userData = JSON.parse(localStorage.getItem('playerData'));
             if (userData) {
-                document.getElementById('userName').textContent = userData.firstName;
-                if (userData.photoUrl) {
-                    document.getElementById('userAvatar').src = userData.photoUrl;
-                }
+                document.getElementById('userName').textContent = userData.name;
                 document.getElementById('userProfile').classList.remove('hidden');
-                document.querySelector('.auth-section').classList.add('hidden');
-                document.querySelector('.game-stats').classList.remove('hidden');
-                document.querySelector('.menu-buttons').classList.remove('hidden');
+                document.getElementById('authSection').classList.add('hidden');
+                document.getElementById('gameStats').classList.remove('hidden');
+                document.getElementById('menuButtons').classList.remove('hidden');
+                
+                // Обновляем статистику
+                const gameData = JSON.parse(localStorage.getItem('gameData')) || initGameData();
+                document.getElementById('currentLevel').textContent = gameData.currentLevel;
+                document.getElementById('currentPoints').textContent = gameData.points;
+                document.getElementById('currentEnergy').textContent = `${gameData.energy}/5`;
+            } else {
+                document.getElementById('userProfile').classList.add('hidden');
+                document.getElementById('authSection').classList.remove('hidden');
+                document.getElementById('gameStats').classList.add('hidden');
+                document.getElementById('menuButtons').classList.add('hidden');
             }
         }
 

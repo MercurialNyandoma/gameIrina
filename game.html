@@ -72,6 +72,7 @@
                 }
             }
             
+            // Убеждаемся, что нет совпадений при старте
             while (findMatches().length > 0) {
                 for (let match of findMatches()) {
                     board[match.r][match.c] = Math.floor(Math.random() * TILE_TYPES);
@@ -109,6 +110,7 @@
                 const rowDiff = Math.abs(row - selectedTile.row);
                 const colDiff = Math.abs(col - selectedTile.col);
                 
+                // Проверяем, что плитки соседние
                 if ((rowDiff === 1 && colDiff === 0) || (rowDiff === 0 && colDiff === 1)) {
                     swapTiles(selectedTile.row, selectedTile.col, row, col);
                 }
@@ -121,6 +123,7 @@
         function swapTiles(r1, c1, r2, c2) {
             isSwapping = true;
             
+            // Меняем плитки местами
             const temp = board[r1][c1];
             board[r1][c1] = board[r2][c2];
             board[r2][c2] = temp;
@@ -133,6 +136,7 @@
                     processMatches(matches);
                     useEnergy();
                 } else {
+                    // Если совпадений нет, возвращаем обратно
                     const temp = board[r1][c1];
                     board[r1][c1] = board[r2][c2];
                     board[r2][c2] = temp;
@@ -145,9 +149,12 @@
         function findMatches() {
             const matches = [];
             
+            // Проверяем горизонтальные совпадения
             for (let r = 0; r < ROWS; r++) {
                 for (let c = 0; c < COLS - 2; c++) {
-                    if (board[r][c] === board[r][c + 1] && board[r][c] === board[r][c + 2]) {
+                    if (board[r][c] !== -1 && 
+                        board[r][c] === board[r][c + 1] && 
+                        board[r][c] === board[r][c + 2]) {
                         matches.push({ r, c });
                         matches.push({ r, c: c + 1 });
                         matches.push({ r, c: c + 2 });
@@ -155,9 +162,12 @@
                 }
             }
             
+            // Проверяем вертикальные совпадения
             for (let c = 0; c < COLS; c++) {
                 for (let r = 0; r < ROWS - 2; r++) {
-                    if (board[r][c] === board[r + 1][c] && board[r][c] === board[r + 2][c]) {
+                    if (board[r][c] !== -1 && 
+                        board[r][c] === board[r + 1][c] && 
+                        board[r][c] === board[r + 2][c]) {
                         matches.push({ r, c });
                         matches.push({ r: r + 1, c });
                         matches.push({ r: r + 2, c });
@@ -165,6 +175,7 @@
                 }
             }
             
+            // Убираем дубликаты
             return [...new Set(matches.map(m => `${m.r},${m.c}`))].map(str => {
                 const [r, c] = str.split(',');
                 return { r: parseInt(r), c: parseInt(c) };
@@ -172,9 +183,11 @@
         }
 
         function processMatches(matches) {
+            // Начисляем очки
             score += matches.length * 10;
             document.getElementById('gamePoints').textContent = score;
             
+            // Удаляем совпадающие плитки
             for (let match of matches) {
                 board[match.r][match.c] = -1;
             }
@@ -200,6 +213,7 @@
             for (let c = 0; c < COLS; c++) {
                 let emptySpaces = 0;
                 
+                // Падаем вниз
                 for (let r = ROWS - 1; r >= 0; r--) {
                     if (board[r][c] === -1) {
                         emptySpaces++;
@@ -209,6 +223,7 @@
                     }
                 }
                 
+                // Заполняем пустые места новыми плитками
                 for (let r = 0; r < ROWS; r++) {
                     if (board[r][c] === -1) {
                         board[r][c] = Math.floor(Math.random() * TILE_TYPES);
@@ -249,7 +264,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            if (!localStorage.getItem('telegramUser')) {
+            if (!localStorage.getItem('playerData')) {
                 location.href = 'index.html';
                 return;
             }
